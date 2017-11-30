@@ -44,10 +44,14 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Trinet.Core.IO.Ntfs, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0aeaaa20a328a46c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Trinet.Core.IO.Ntfs.4.0.0\lib\net35\Trinet.Core.IO.Ntfs.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DllToExeInjector.cs" />
     <Compile Include="IntegerExtensions.cs" />
+    <Compile Include="NTFSStreamUtils.cs" />
     <Compile Include="PeFileExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
