@@ -34,10 +34,6 @@ namespace DllToExeInjector
             {
                 sourceFileStream.CopyTo(destFileStream);
             }
-            foreach(var st in destination.ListAlternateDataStreams())
-            {
-                Console.WriteLine(st.Name);
-            }
             return destination.Name + ":" + sourceName;
         }
     }

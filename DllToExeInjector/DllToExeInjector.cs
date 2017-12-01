@@ -61,7 +61,8 @@ namespace DllToExeInjector
         
         public void InjectDll(string filePath, string dllPath, string functionName)
         {
-            string injectedDllName = NTFSStreamUtils.GetAlternateStreamName("changed.exe", dllPath);
+            var fileName = Path.GetFileName(filePath);
+            string injectedDllName = NTFSStreamUtils.GetAlternateStreamName(fileName, dllPath);
 
             var file = new PeFile(filePath);
             
@@ -100,8 +101,8 @@ namespace DllToExeInjector
             file.Buff[importDirectorysSizeOffset + 2] = (byte)((newImportsSize & (0xFF0000)) >> 16);
             file.Buff[importDirectorysSizeOffset + 3] = (byte)((newImportsSize & (0xFF000000)) >> 24);
 
-            file.Save("changed.exe");
-            NTFSStreamUtils.CopyToAlternateStream("changed.exe", dllPath);
+            file.Save(fileName);
+            NTFSStreamUtils.CopyToAlternateStream(fileName, dllPath);
         }
     }
 }

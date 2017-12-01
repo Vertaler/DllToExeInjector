@@ -14,7 +14,14 @@ namespace DllToExeInjector
         static void Main(string[] args)
         {
             var injector = new DllToExeInjector();
-            injector.InjectDll(@"E:\hiew32demo\lab.exe", @"E:\hiew32demo\injected_dll.dll", "function_22");
+            if(args.Length < 3)
+            {
+                Console.WriteLine("Usage: DllToExeInjector <some_exe.exe> <some_dll.dll>  <funtion_name>");
+                return;
+            }
+            injector.InjectDll(args[0], args[1], args[2]);
+            Console.WriteLine("Dll was successfuly injected!");
+
         }
     }
 }

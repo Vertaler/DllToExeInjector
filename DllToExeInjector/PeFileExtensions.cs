@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -79,7 +80,8 @@ namespace DllToExeInjector
 
         public static void Save(this PeFile file, string name)
         {
-            System.IO.File.WriteAllBytes(name, file.Buff);
+         
+           File.WriteAllBytes(name, file.Buff);
         }
 
     }
